@@ -51,7 +51,7 @@ Note: `/lists/` is hidden, not password-protected — anyone who knows the addre
 
 ## Files
 
-- `assets/style.css` – the whole design (colors at the top: brown `#2d1b0a` / gold `#d4af37`); the phone/tablet layout is the "Mobile pass" section at the bottom
+- `assets/style.css` – the whole design (colors at the top: brown `#2d1b0a` / gold `#d4af37`)
 - `assets/site.js` – menu + photo viewer
 - `assets/js/*.js` – the Google-Sheets-driven pages (same sheet URLs, form IDs and entry IDs as before)
 - `assets/img/` – photos and פרנס היום posters copied from the old Google Site

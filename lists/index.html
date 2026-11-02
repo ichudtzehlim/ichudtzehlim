@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Contact List | איחוד צעהלים</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/lists.css">
+<script src="../assets/js/lists.js" defer></script>
+</head>
+<body>
+<div id="successToast" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Contact updated successfully!</div>
+<header class="top"><div class="top-inner">
+ <div class="brand"><span class="mark"><img src="../assets/logo-128.png" alt=""></span></div>
+ <h1>Contact List</h1>
+ <p class="subtitle">.ביטע מאכט זיכער אז אייער אינפארמאציע איז ריכטיג</p>
+ <div class="toolbar">
+  <button type="button" id="refreshBtn" class="btn btn-gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Refresh All</button>
+  <div class="custom-dropdown">
+   <button type="button" class="dropdown-trigger" id="dropdownTrigger" aria-haspopup="listbox" aria-expanded="false"><span id="selectedClass">Select Class</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></button>
+   <div id="dropdownMenu" class="dropdown-menu hidden">
+    <input type="text" id="dropdownSearch" class="dropdown-search" placeholder="Search classes..." aria-label="Search classes">
+    <div id="dropdownOptions"></div>
+   </div>
+  </div>
+  <div class="search"><input type="text" id="searchInput" placeholder="Search in this class..." aria-label="Search in this class"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+  <a id="exportBtn" class="btn btn-outline hidden" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</a>
+  <div id="contactStats"></div>
+ </div>
+</div></header>
+<main>
+ <div id="loadingMessage"><svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg> Loading contacts...</div>
+ <div id="errorMessage" class="hidden"></div>
+ <div id="manualLoadSection" class="hidden">
+  <h3>Load Issue Detected</h3>
+  <p>CORS blocked the sheets. Paste CSV from Contacts sheet (gid=63568495) below:</p>
+  <textarea id="manualCsv" rows="6" placeholder="Paste full CSV here..."></textarea>
+  <button type="button" id="manualBtn" class="btn btn-dark">Load Manually</button>
+ </div>
+ <div id="contactList"></div>
+</main>
+<div id="editModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+ <div class="panel">
+  <h3 id="editTitle">Edit Contact</h3>
+  <form id="editForm">
+   <input type="hidden" id="editIndex">
+   <input type="hidden" id="editClassId" name="entry.2736575">
+   <div class="grid g2">
+    <div><label for="editFirstName">First Name</label><input type="text" id="editFirstName" required></div>
+    <div><label for="editLastName">Last Name</label><input type="text" id="editLastName" required></div>
+   </div>
+   <div class="grid g2">
+    <div class="hebrew"><label for="editFirstNameHeb">First Name (Hebrew)</label><input type="text" id="editFirstNameHeb" dir="rtl"></div>
+    <div class="hebrew"><label for="editLastNameHeb">Last Name (Hebrew)</label><input type="text" id="editLastNameHeb" dir="rtl"></div>
+   </div>
+   <div class="grid g3">
+    <div><label for="editAddress">Street Address</label><input type="text" id="editAddress"></div>
+    <div><label for="editApt">Apt / Suite</label><input type="text" id="editApt"></div>
+   </div>
+   <div class="grid g4">
+    <div class="span2"><label for="editCity">City</label><input type="text" id="editCity"></div>
+    <div><label for="editState">State</label><input type="text" id="editState"></div>
+    <div><label for="editZip">Zip Code</label><input type="text" id="editZip"></div>
+   </div>
+   <div class="grid g2">
+    <div><label for="editPhone">Phone Number</label><input type="tel" id="editPhone"></div>
+    <div><label for="editEmail">Email Address</label><input type="email" id="editEmail"></div>
+   </div>
+   <div class="actions">
+    <button type="button" id="cancelEdit" class="btn btn-muted">Cancel</button>
+    <button type="submit" class="btn btn-gold">Save Changes</button>
+   </div>
+  </form>
+ </div>
+</div>
+<iframe name="hiddenFrame" style="display:none" title="hidden"></iframe>
+</body>
+</html>

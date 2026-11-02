@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /lists
+Disallow: /lists/
+
+Sitemap: https://tzehlim.com/sitemap.xml
