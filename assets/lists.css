@@ -1,0 +1,98 @@
+/* Contact List (hidden admin page) */
+:root{--brown-900:#2d1b0a;--brown-800:#3d2b1f;--brown-600:#5c4033;--tan:#8b6f47;--gold:#d4af37;--gold-deep:#b8860b;--gold-bright:#f2d27a;--cream:#f7f1e3;--paper:#fffdf8;--line:#e6d9b8;--ink:#2a1c10;--muted:#6f5a45}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Heebo","Segoe UI",system-ui,sans-serif;background:var(--cream);color:var(--ink);font-size:16px;line-height:1.6}
+svg{width:1.1em;height:1.1em;flex-shrink:0}
+.hebrew{direction:rtl;text-align:right}
+.hidden{display:none !important}
+.top{background:linear-gradient(180deg,var(--brown-800),var(--brown-900));color:var(--cream);border-bottom:2px solid var(--gold-deep);padding:22px 16px 26px}
+.top-inner{max-width:1200px;margin:0 auto}
+.brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:6px}
+.brand span.mark{width:52px;height:52px;border-radius:50%;background:var(--cream);border:2px solid var(--gold);display:grid;place-items:center}
+.brand img{width:40px;height:40px;object-fit:contain}
+h1{font-family:"Frank Ruhl Libre",serif;color:var(--gold-bright);text-align:center;margin:0;font-size:2.3rem}
+.subtitle{text-align:center;color:#e9d6a0;margin:4px 0 20px;direction:rtl}
+.toolbar{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:10px 22px;border-radius:999px;border:1.5px solid transparent;font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.btn-gold{background:linear-gradient(180deg,#e4c158,var(--gold-deep));color:var(--brown-900);border-color:#a57a0a}
+.btn-gold:hover{filter:brightness(1.06)}
+.btn-outline{background:transparent;color:var(--gold-bright);border-color:rgba(212,175,55,.65)}
+.btn-outline:hover{background:rgba(212,175,55,.12)}
+.btn-dark{background:var(--brown-800);color:var(--gold-bright)}
+.btn-muted{background:#e9e1cf;color:var(--brown-800)}
+.custom-dropdown{position:relative;width:min(320px,100%)}
+.dropdown-trigger{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:48px;padding:10px 16px;border-radius:12px;background:var(--paper);color:var(--ink);border:1.5px solid var(--line);font-weight:700;cursor:pointer;width:100%;font:inherit}
+.dropdown-trigger:focus-visible{outline:3px solid var(--gold)}
+.dropdown-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.25);z-index:30;max-height:360px;overflow-y:auto;color:var(--ink)}
+.dropdown-search{width:100%;padding:12px 14px;border:0;border-bottom:1px solid var(--line);font:inherit;outline:none;background:#fff}
+.dropdown-option{padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:10px}
+.dropdown-option:hover{background:var(--cream)}
+.dropdown-option svg{color:var(--gold-deep)}
+.no-classes{padding:18px;text-align:center;color:var(--muted)}
+.search{position:relative;width:min(320px,100%)}
+.search input{width:100%;min-height:48px;border-radius:12px;border:1.5px solid var(--line);padding:10px 14px 10px 40px;font:inherit;background:#fff}
+.search input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.3)}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--tan)}
+#contactStats{color:#e9d6a0;font-weight:700;min-width:120px;text-align:center}
+main{max-width:1240px;margin:0 auto;padding:28px 16px 60px}
+#loadingMessage,.empty{text-align:center;color:var(--muted);font-size:1.25rem;padding:70px 0}
+#errorMessage{text-align:center;color:#a4461c;font-size:1.1rem;padding:20px}
+#manualLoadSection{background:#fff8e1;border:1.5px solid #ecd27e;border-radius:14px;padding:24px;max-width:640px;margin:0 auto;text-align:center}
+#manualLoadSection textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;margin:10px 0}
+#contactList{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr))}
+.contact-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(45,27,10,.06),0 8px 22px rgba(45,27,10,.08);display:flex;flex-direction:column}
+.contact-card .head{background:linear-gradient(180deg,var(--brown-800),var(--brown-900));color:var(--cream);padding:18px 18px 16px;text-align:center;border-bottom:3px solid var(--gold-deep)}
+.contact-card .head h3{font-family:"Frank Ruhl Libre",serif;font-size:1.65rem;margin:0;color:var(--gold-bright);line-height:1.25}
+.contact-card .head p{margin:4px 0 0;opacity:.9}
+.contact-card .body{padding:16px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.row{display:flex;gap:10px;align-items:flex-start;overflow-wrap:anywhere}
+.row svg{margin-top:4px;color:var(--gold-deep)}
+.contact-card .foot{padding:12px 18px 16px;border-top:1px solid var(--line);text-align:right}
+.contact-card .foot .btn{min-height:42px;padding:8px 18px}
+#successToast{position:fixed;top:20px;left:50%;transform:translate(-50%,-120px);background:var(--brown-800);color:var(--gold-bright);border:1.5px solid var(--gold);padding:14px 28px;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.25);font-size:1.15rem;font-weight:700;z-index:10000;opacity:0;display:flex;align-items:center;gap:12px;transition:all .45s ease}
+#successToast.show{transform:translate(-50%,0);opacity:1}
+#editModal{position:fixed;inset:0;background:rgba(20,12,4,.7);display:flex;align-items:center;justify-content:center;z-index:50;padding:12px}
+#editModal .panel{background:var(--paper);border-radius:20px;box-shadow:0 30px 60px rgba(0,0,0,.4);padding:24px;width:100%;max-width:860px;max-height:calc(100vh - 24px);overflow-y:auto;border-top:5px solid var(--gold-deep)}
+#editModal h3{font-family:"Frank Ruhl Libre",serif;font-size:2rem;text-align:center;margin:0 0 18px;color:var(--brown-900)}
+.grid{display:grid;gap:14px;margin-bottom:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.g3{grid-template-columns:2fr 1fr}
+.g4{grid-template-columns:2fr 1fr 1fr}
+@media(max-width:620px){.g3,.g4{grid-template-columns:1fr 1fr}.g4 .span2{grid-column:span 2}}
+label{display:block;font-weight:700;color:var(--brown-600);margin-bottom:6px;font-size:.95rem}
+#editForm input{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff}
+#editForm input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.3)}
+.actions{display:flex;justify-content:flex-end;gap:12px;padding-top:10px}
+
+/* ---------- phones ---------- */
+.row a.tel{color:inherit;text-decoration-color:var(--gold);text-underline-offset:3px}
+@media(max-width:600px){
+ .top{padding:14px 12px 16px}
+ .brand{margin-bottom:2px}
+ .brand span.mark{width:40px;height:40px}
+ .brand img{width:30px;height:30px}
+ h1{font-size:1.7rem}
+ .subtitle{margin:2px 0 12px;font-size:.95rem}
+ .toolbar{gap:8px}
+ .toolbar>.btn{flex:1 1 auto;justify-content:center}
+ .custom-dropdown,.search{width:100%}
+ #contactStats{width:100%;min-width:0}
+ main{padding:12px 10px 40px}
+ #contactList{gap:10px}
+ .contact-card{display:grid;grid-template-columns:1fr auto;border-radius:12px}
+ .contact-card .head{grid-column:1/-1;padding:9px 14px 8px;border-bottom-width:2px}
+ .contact-card .head h3{font-size:1.25rem}
+ .contact-card .head p{margin:0;font-size:.9rem}
+ .contact-card .body{padding:10px 14px 12px;gap:6px;font-size:.98rem}
+ .contact-card .foot{padding:10px 12px 12px 0;border-top:0;align-self:end}
+ .contact-card .foot .btn{min-height:44px;padding:8px 14px;font-size:.92rem}
+ .row a.tel{display:inline-block;padding:6px 0;margin:-6px 0}
+ #editModal{padding:0;align-items:flex-end}
+ #editModal .panel{border-radius:18px 18px 0 0;padding:16px 14px 0;max-height:94dvh}
+ #editModal h3{font-size:1.5rem;margin-bottom:12px}
+ .grid{gap:10px;margin-bottom:10px}
+ #editForm input{font-size:16px}
+ .actions{position:sticky;bottom:0;background:var(--paper);padding:10px 0 calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+ .actions .btn{flex:1;justify-content:center}
+ #successToast{width:calc(100% - 24px);justify-content:center;font-size:1rem;padding:12px 16px}
+}

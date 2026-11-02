@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>לוח השבוע</title>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@page {
+    size: Letter landscape;
+    margin: 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #e7e3d9;
+    font-family: "Frank Ruhl Libre", "David", serif;
+    height: 100%;
+}
+
+.sheet {
+    width: 11in;
+    height: 8.5in;
+    background: #fffdf8;
+    margin: auto;
+    padding: 28px 35px 35px 35px;
+    box-sizing: border-box;
+    position: relative;
+    border: 12px solid #6b1e1e;
+    display: flex;
+    flex-direction: column;
+}
+
+.sheet::before {
+    content: "";
+    position: absolute;
+    top: 18px;
+    bottom: 18px;
+    left: 18px;
+    right: 18px;
+    border: 4px solid #c6a34f;
+    pointer-events: none;
+}
+
+.header {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: #6b1e1e;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #c6a34f;
+}
+
+/* Masechta title under header */
+.masechta-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #6b1e1e;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+
+.masechta-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #6b1e1e;
+    margin-bottom: 10px;
+
+    text-decoration: underline;
+    text-underline-offset: 6px; /* moves the line slightly lower for better look */
+    text-decoration-thickness: 2px; /* makes the line thicker */
+}
+
+/* content area stretched to reduce footer white space */
+.content {
+    display: flex;
+    flex: 1 1 auto;            /* expand to fill available vertical space */
+    gap: 18px;
+    align-items: stretch;
+    margin-top: 6px;
+}
+
+.calendar-side {
+    width: 72%;
+    padding-left: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar {
+    display: grid;
+    gap: 10px;
+    flex: 1 1 auto; /* let it expand downward */
+}
+
+.day-row {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    align-items: center;
+    border: 2px solid #6b1e1e;
+    background: #faf4e6;
+    padding: 10px 14px;
+    font-size: 24px;
+    min-height: 52px;
+}
+
+.day-name {
+    font-weight: bold;
+    color: #6b1e1e;
+    text-align: center;
+    border-left: 3px solid #c6a34f;
+}
+
+.daf-box {
+    padding-right: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.daf-box:empty:before {
+    content: "כתוב הדף כאן...";
+    color: #999;
+}
+
+.logo-side {
+    width: 28%;
+    border-right: 4px double #c6a34f;
+    padding-right: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* boxes in right column */
+.box {
+    border: 3px solid #6b1e1e;
+    padding: 22px;
+    background: #faf4e6;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.box img {
+    max-width: 100%;
+    max-height: 200px;
+    margin-bottom: 15px;
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: bold;
+    color: #6b1e1e;
+    line-height: 1.5;
+}
+
+.bechina-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #6b1e1e;
+    margin-bottom: 6px;
+}
+
+/* date centered visually between title and daf */
+.bechina-date {
+    font-size: 20px;
+    font-weight: bold;
+    color: #6b1e1e;
+
+    margin: 7px 0 7px 0;
+}
+
+
+.bechina-content {
+    font-size: 22px;
+    font-weight: bold;
+    color: #6b1e1e;
+}
+
+/* footer anchored to bottom */
+.footer {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 18px;
+    color: #6b1e1e;
+    border-top: 2px solid #c6a34f;
+    padding-top: 8px;
+    flex: 0 0 auto;
+}
+
+.buttons {
+    text-align: center;
+    margin: 12px;
+}
+
+button, select {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    margin: 5px;
+}
+
+button {
+    background: #6b1e1e;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #8c2c2c;
+}
+
+select {
+    background: white;
+    border: 2px solid #6b1e1e;
+    cursor: pointer;
+}
+
+@media print {
+    .buttons { display: none; }
+}
+
+/* MOBILE RESPONSIVE */
+@media screen and (max-width: 900px) {
+    .sheet {
+        width: 95%;
+        height: auto;
+        padding: 20px 10px;
+        border: 6px solid #6b1e1e;
+    }
+
+    .header {
+        font-size: 32px;
+        padding-bottom: 4px;
+    }
+
+    .masechta-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    /* STACK CONTENT VERTICALLY */
+    .content {
+        flex-direction: column; /* stack calendar and logo-side vertically */
+        gap: 12px;
+    }
+
+    .logo-side {
+        order: -1; /* move logo-side to top */
+        width: 100%;
+        padding: 0;
+        border-right: none;
+        margin-bottom: 12px; /* optional spacing below image box */
+    }
+
+    .calendar-side {
+        order: 1; /* calendar below logo-side */
+        width: 100%;
+        padding: 0;
+    }
+
+    .calendar {
+        gap: 6px;
+    }
+
+    .day-row {
+        font-size: 20px;
+        padding: 8px 10px;
+        min-height: 46px;
+    }
+
+    .day-name {
+        font-size: 18px;
+    }
+
+    .daf-box {
+        font-size: 18px;
+        padding-right: 8px;
+    }
+
+    .logo-text {
+        font-size: 18px;
+    }
+
+    .bechina-title {
+        font-size: 20px;
+    }
+
+    .bechina-date {
+        font-size: 18px;
+        margin: 4px 0 10px 0;
+    }
+
+    .bechina-content {
+        font-size: 18px;
+    }
+
+    .footer {
+        font-size: 16px;
+        padding-top: 6px;
+    }
+
+    button, select {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+}
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+/*
+  CSV_COLUMN MAP (based on previous code)
+  index 0 = column A (date for week row)
+  index 1 = column B (daf / text)
+  index 3 = column D
+  index 4 = column E (week name column used earlier for weekRows)
+  index 5 = column F (masechta requested)
+  index 6 = column G (year)
+*/
+
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRSpmrxEpZa5utQAbgrONyc6QBQkh1Anhvb1hlV54SMsK-MBcX5dI3z5SB73bDsUCl6h8FimCBlOipO/pub?gid=1071397867&single=true&output=csv";
+
+let rows = [];
+let weekRows = [];
+
+Papa.parse(CSV_URL, {
+    download: true,
+    complete: function(results) {
+        rows = results.data || [];
+        buildWeeks();
+    }
+});
+
+function buildWeeks() {
+    const select = document.getElementById("weekSelect");
+    select.innerHTML = "";
+    weekRows = [];
+
+    rows.forEach((r, i) => {
+        // use column E (index 4) as week name marker (same as previous code)
+        // (row 0 is the sheet's header row — skip it)
+        if (i > 0 && r[4] && r[4].trim() !== "") {
+            weekRows.push({
+                index: i,
+                name: r[4].trim(),
+                date: r[0]?.trim()
+            });
+        }
+    });
+
+    weekRows.forEach(w => {
+
+        let yearStart = "";
+        for (let i = w.index; i >= 0; i--) {
+            if (rows[i] && rows[i][6] && rows[i][6].trim() !== "") {
+                yearStart = rows[i][6].trim();
+                break;
+            }
+            if (rows[i] && rows[i][4] && rows[i][4].trim() !== "" && i !== w.index) {
+                break;
+            }
+        }
+
+        if (yearStart) {
+            const sep = document.createElement("option");
+            sep.textContent = "-------" + yearStart + "--------";
+            sep.disabled = true;
+            select.appendChild(sep);
+        }
+
+        const opt = document.createElement("option");
+        opt.value = w.index;
+        opt.textContent = w.name;
+        select.appendChild(opt);
+    });
+
+    const current = findCurrentWeek();
+    select.value = current ?? (weekRows.length ? weekRows[weekRows.length - 1].index : undefined);
+
+    renderWeek(select.value);
+
+    select.addEventListener("change", e => renderWeek(e.target.value));
+}
+
+function findCurrentWeek() {
+    const today = new Date();
+    for (let w of weekRows) {
+        const d = new Date(w.date);
+        if (!isNaN(d) && d >= today) {
+            return w.index;
+        }
+    }
+    return null;
+}
+
+function renderWeek(weekIndex) {
+    weekIndex = parseInt(weekIndex);
+
+    // Find year (column G = index 6)
+    let year = "";
+    for (let i = weekIndex; i >= 0; i--) {
+        if (rows[i] && rows[i][6] && rows[i][6].trim() !== "") {
+            year = rows[i][6].trim();
+            break;
+        }
+    }
+
+    // Find masechta (column F = index 5)
+    let masechta = "";
+    for (let i = weekIndex; i >= 0; i--) {
+        if (rows[i] && rows[i][5] && rows[i][5].trim() !== "") {
+            masechta = rows[i][5].trim();
+            break;
+        }
+    }
+
+    // Set masechta text (remove leading "מסכת" if present in sheet)
+    masechta = masechta ? masechta.replace(/^מסכת\s*/i, "") : "";
+    document.getElementById("masechtaText").textContent =
+        masechta ? `מסכת ${masechta}` : "";
+
+    // Week name (column E = index 4)
+    let weekName = (rows[weekIndex] && rows[weekIndex][4]) ? rows[weekIndex][4].trim() : "";
+    // Remove leading "פרשת" if it already exists
+    weekName = weekName.replace(/^פרשת\s*/i, "");
+
+    document.getElementById("headerText").textContent =
+        `פרשת ${weekName} ${year ? "שנת " + year : ""} ${year ? "לפ\"ק" : ""}`.trim();
+
+    // Fill the 7 day boxes: find start row that corresponds to the week (use weekIndex - 6...weekIndex)
+    const dayBoxes = document.querySelectorAll(".daf-box");
+    const start = Math.max(0, weekIndex - 6);
+
+    for (let i = 0; i < 7; i++) {
+        const r = rows[start + i] || [];
+        dayBoxes[i].textContent =
+            (!r[1] || r[1].trim() === "") ? "חזרה" : r[1];
+    }
+
+    updateBechinaDisplay(weekIndex);
+}
+
+function updateBechinaDisplay(weekIndex) {
+    const bechinaDiv = document.getElementById("bechinaDate");
+    const bechinaContentDiv = document.getElementById("bechinaContent");
+    bechinaDiv.textContent = "";
+    bechinaContentDiv.textContent = "מדף — עד דף —"; // default
+
+    weekIndex = parseInt(weekIndex);
+
+    // Find next 'בחינה' after the selected week
+    let nextBechinaIdx = -1;
+    for (let i = weekIndex + 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row) continue;
+        if (row[1] && row[1].includes("בחינה")) {
+            nextBechinaIdx = i;
+            break;
+        }
+    }
+
+    // Find previous 'בחינה' before the selected week (last one < weekIndex)
+    let prevBechinaIdx = -1;
+    for (let i = weekIndex - 1; i >= 0; i--) {
+        const row = rows[i];
+        if (!row) continue;
+        if (row[1] && row[1].includes("בחינה")) {
+            prevBechinaIdx = i;
+            break;
+        }
+    }
+
+    // Compute start daf (כא.) per your formula: the row after the previous 'בחינה' (column B index 1)
+    let startDaf = "";
+    if (prevBechinaIdx !== -1) {
+        const targetRow = rows[prevBechinaIdx + 1] || [];
+        startDaf = (targetRow[1] || "").trim();
+    }
+
+    // Compute end daf (לד) per your SUBSTITUTE/TRIM on the next 'בחינה' B cell
+    let endDaf = "";
+    if (nextBechinaIdx !== -1) {
+        endDaf = (rows[nextBechinaIdx][1] || "").replace(" - בחינה", "").trim();
+    }
+
+    // Compute the bechina date: column D (index 3) + first non-empty column E (index 4) after the found bechina row
+    let dateD = "";
+    let dateE = "";
+    if (nextBechinaIdx !== -1) {
+        dateD = rows[nextBechinaIdx][3] || "";
+        dateE = rows[nextBechinaIdx][4] || "";
+        if ((!dateE || dateE.trim() === "")) {
+            // search down for first non-empty E column
+            for (let j = nextBechinaIdx + 1; j < rows.length; j++) {
+                if (!rows[j]) continue;
+                if (rows[j][4] && rows[j][4].trim() !== "") {
+                    dateE = rows[j][4].trim();
+                    break;
+                }
+            }
+        }
+    }
+
+    // Fill text with sensible fallbacks
+    const startText = startDaf || "—";
+    const endText = endDaf || "—";
+    bechinaContentDiv.textContent = `מדף ${startText} עד דף ${endText}`;
+
+    const dateText = (dateD || "") + ((dateD && dateE) ? " " : "") + (dateE || "");
+    bechinaDiv.textContent = dateText || "—";
+}
+
+function printPage() {
+
+    const content = document.querySelector(".sheet").outerHTML;
+
+    const printWindow = window.open("", "_blank");
+
+    printWindow.document.write(`
+        <html dir="rtl" lang="he">
+        <head>
+            <title>לוח השבוע</title>
+<meta name="robots" content="noindex">
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    margin: 0;
+                    background: white;
+                }
+                @page {
+                    size: Letter landscape;
+                    margin: 0;
+                }
+            </style>
+            ${document.querySelector("style").outerHTML}
+        </head>
+        <body>
+            ${content}
+            <script>
+                window.onload = function() {
+                    window.print();
+window.onafterprint = function() { window.close(); };
+                };
+            <\/script>
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="buttons">
+    <button onclick="printPage()">Print PDF</button>
+    <select id="weekSelect"></select>
+</div>
+
+<div class="sheet">
+
+    <div class="header" id="headerText">
+        פרשת מקץ שנת תשפ"ה לפ"ק
+    </div>
+
+    <div class="masechta-title" id="masechtaText"></div>
+
+    <div class="content">
+
+        <div class="calendar-side">
+            <div class="calendar">
+                <div class="day-row"><div class="day-name">זונטאג</div><div class="daf-box"></div></div>
+                <div class="day-row"><div class="day-name">מאנטאג</div><div class="daf-box"></div></div>
+                <div class="day-row"><div class="day-name">דינסטאג</div><div class="daf-box"></div></div>
+                <div class="day-row"><div class="day-name">מיטוואך</div><div class="daf-box"></div></div>
+                <div class="day-row"><div class="day-name">דאנערשטאג</div><div class="daf-box"></div></div>
+                <div class="day-row"><div class="day-name">פרייטאג</div><div class="daf-box"></div></div>
+                <div class="day-row"><div class="day-name">שבת קודש</div><div class="daf-box"></div></div>
+            </div>
+        </div>
+
+        <div class="logo-side">
+            <div class="box">
+                <img src="https://static.wixstatic.com/media/555f7a_c1d38e201db2435eafe69bfeade3a443~mv2.png" alt="logo">
+                <div class="logo-text">
+                    חבורת תורתי לומדי ש"ס<br>
+                    דק"ק ערוגת הבשם צעהלים
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="bechina-title">יום בחינה הבאה</div>
+                <div class="bechina-date" id="bechinaDate"></div>
+                <div class="bechina-content" id="bechinaContent">מדף — עד דף —</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        קול צעהלים • 1.716.623.4793 &gt; 7
+    </div>
+
+</div>
+
+</body>
+</html>
